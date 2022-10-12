@@ -6,7 +6,7 @@ class CreatePosts < ActiveRecord::Migration[6.1]
       t.string :title
       t.string :content
       t.boolean :published
-      t.references :user, null: false, foreign_key: true
+      t.references :author, index: true, foreign_key: { to_table: :users }
 
       t.timestamps
     end

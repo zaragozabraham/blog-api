@@ -2,7 +2,6 @@
 
 class PostsController < ApplicationController
   rescue_from Exception do |e|
-    log.error e.message.to_s
     render json: { error: e.message }, status: :internal_error
   end
 
@@ -34,7 +33,7 @@ class PostsController < ApplicationController
   private
 
   def create_post_params
-    params.require(:post).permit(%i[title content published user_id])
+    params.require(:post).permit(%i[title content published author_id])
   end
 
   def update_post_params

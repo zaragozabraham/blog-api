@@ -7,6 +7,6 @@ FactoryBot.define do
     title { Faker::Lorem.sentence }
     content { Faker::Lorem.paragraph }
     published { [true, false].sample }
-    user
+    author factory: :user
   end
 end

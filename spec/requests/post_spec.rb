@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'byebug'
 
 RSpec.describe 'Posts', type: :request do
   describe 'GET /posts' do
@@ -30,12 +31,38 @@ RSpec.describe 'Posts', type: :request do
   end
 
   describe 'GET /posts/:id' do
-    let(:post) { create(:post) }
+    let(:user) { create(:user) }
+    let(:post) { create(:post, author_id: user.id) }
     let(:payload) { JSON.parse(response.body) }
 
-    it 'returns a post' do
+    it 'returns a post with id' do
       get "/posts/#{post.id}"
       expect(payload['id']).to eq(post.id)
+    end
+
+    it 'returns a post with title' do
+      get "/posts/#{post.id}"
+      expect(payload['title']).to eq(post.title)
+    end
+
+    it 'returns a post with content' do
+      get "/posts/#{post.id}"
+      expect(payload['content']).to eq(post.content)
+    end
+
+    it 'returns a post with user name' do
+      get "/posts/#{post.id}"
+      expect(payload['author']['name']).to eq(user.name)
+    end
+
+    it 'returns a post with user email' do
+      get "/posts/#{post.id}"
+      expect(payload['author']['email']).to eq(user.email)
+    end
+
+    it 'returns a post with user id' do
+      get "/posts/#{post.id}"
+      expect(payload['author']['id']).to eq(user.id)
     end
   end
 
@@ -47,7 +74,7 @@ RSpec.describe 'Posts', type: :request do
         title: 'some title',
         content: 'some content of the post',
         published: false,
-        user_id: user.id
+        author_id: user.id
       } }
     end
 
@@ -69,7 +96,7 @@ RSpec.describe 'Posts', type: :request do
       { post: {
         content: 'some content of the post',
         published: false,
-        user_id: user.id
+        author_id: user.id
       } }
     end
 
