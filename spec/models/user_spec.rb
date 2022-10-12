@@ -3,21 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  subject(:user) { described_class.new }
+
   describe 'validation of required fields' do
     it 'validates presence of name' do
-      should validate_presence_of(:name)
+      expect(user).to validate_presence_of(:name)
     end
 
     it 'validates presence of email' do
-      should validate_presence_of(:email)
+      expect(user).to validate_presence_of(:email)
     end
 
     it 'validates presence of auth_token' do
-      should validate_presence_of(:auth_token)
+      expect(user).to validate_presence_of(:auth_token)
     end
 
     it 'validate relations' do
-      should have_many(:posts)
+      expect(user).to have_many(:posts)
     end
   end
 end
