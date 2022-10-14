@@ -13,7 +13,7 @@ class PostsController < ApplicationController
 
   def index
     @posts = Post.where(published: true)
-    render json: @posts, status: :ok
+    render json: @posts.includes(:author), status: :ok
   end
 
   def show

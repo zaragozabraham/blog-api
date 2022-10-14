@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'byebug'
 
 RSpec.describe 'Posts', type: :request do
   describe 'GET /posts' do
@@ -63,6 +62,27 @@ RSpec.describe 'Posts', type: :request do
     it 'returns a post with user id' do
       get "/posts/#{post.id}"
       expect(payload['author']['id']).to eq(user.id)
+    end
+  end
+
+  describe 'Search | Get /posts' do
+    let!(:post1) { create(:published_post, title: 'Hello World') }
+    let!(:post2) { create(:published_post, title: 'Welcome to Rails') }
+    let(:post3) { create(:published_post, title: 'API with Ruby on Rails') }
+    let(:payload) { JSON.parse(response.body) }
+
+    before { get '/posts?search=Rails' }
+
+    it 'filters posts by title' do
+      expect(payload).not_to be_empty
+    end
+
+    it 'returns two posts' do
+      expect(payload.size).to eq(2)
+    end
+
+    it "returns the two post that contain 'Rails' in the title" do
+      expect(payload.map { |p| p['id'] }.sort).to eq([post1.id, post2.id])
     end
   end
 
