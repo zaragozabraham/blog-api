@@ -97,8 +97,9 @@ RSpec.describe 'Posts', type: :request do
         author_id: user.id
       } }
     end
+    let!(:auth_headers) { { 'Authorization' => "Bearer #{user.auth_token}" } }
 
-    before { post '/posts', params: req_payload }
+    before { post '/posts', params: req_payload, headers: auth_headers }
 
     it 'creates a post' do
       expect(payload['id']).not_to be_nil
